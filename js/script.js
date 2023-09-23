@@ -13,19 +13,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function addTodo() {
-    const textTodo = document.getElementById('title').value;
-    const timestamp = document.getElementById('date').value;
+  const textTodo = document.getElementById("title").value;
+  const timestamp = document.getElementById("date").value;
 
-    
-    const generatedID = generateID();
+  const generatedID = generateID();
 
-    const todoObject = generateTodoObject(generatedID, textTodo, timestamp, false);
+  const todoObject = generateTodoObject(
+    generatedID,
+    textTodo,
+    timestamp,
+    false
+  );
 
-    todos.push(todoObject);
+  todos.push(todoObject);
 
+  document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
 
-    document.dispatchEvent(new Event(RENDER_EVENT));
-    saveData();
+  // Tambahkan alert setelah todo ditambahkan
+  alert("Berhasil ditambahkan!");
+
+  // Tambahkan kode untuk mencetak isi localStorage ke konsol
+  console.log(localStorage.getItem(STORAGE_KEY));
 }
 
 
@@ -112,14 +121,21 @@ function makeTodo(todoObject) {
 }
 
 function addTaskToCompleted(todoId) {
-    const todoTarget = findTodo(todoId);
+  const todoTarget = findTodo(todoId);
 
-    if(todoTarget === null) return;
+  if (todoTarget === null) return;
 
-    todoTarget.isCompleted = true;
-    document.dispatchEvent(new Event(RENDER_EVENT));
-    saveData();
+  todoTarget.isCompleted = true;
+  document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
+
+  // Tambahkan alert setelah todo ditandai sebagai selesai
+  alert("Berhasil ditandai sebagai selesai!");
+
+  // Tambahkan kode untuk mencetak isi localStorage ke konsol
+  console.log(localStorage.getItem(STORAGE_KEY));
 }
+
 
 function findTodo(todoId) {
     for (const todoItem of todos) {
@@ -133,23 +149,35 @@ function findTodo(todoId) {
 
 
 function removeTaskFromCompleted(todoId) {
-    const todoTarget = findTodoIndex(todoId);
+  const todoTarget = findTodoIndex(todoId);
 
-    if(todoTarget === -1) return;
+  if (todoTarget === -1) return;
 
-    todos.splice(todoTarget, 1);
-    document.dispatchEvent(new Event (RENDER_EVENT));
-    saveData();
+  todos.splice(todoTarget, 1);
+  document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
+
+  // Tambahkan alert setelah todo dihapus dari daftar selesai
+  alert("Berhasil dihapus dari daftar selesai!");
+
+  // Tambahkan kode untuk mencetak isi localStorage ke konsol
+  console.log(localStorage.getItem(STORAGE_KEY));
 }
 
 function undoTaskFromCompleted(todoId) {
-    const todoTarget = findTodo(todoId);
+  const todoTarget = findTodo(todoId);
 
-    if(todoTarget === null) return;
+  if (todoTarget === null) return;
 
-    todoTarget.isCompleted = false;
-    document.dispatchEvent(new Event (RENDER_EVENT));
-    saveData();
+  todoTarget.isCompleted = false;
+  document.dispatchEvent(new Event(RENDER_EVENT));
+  saveData();
+
+  // Tambahkan alert setelah todo diubah kembali menjadi belum selesai
+  alert("Berhasil diubah kembali menjadi belum selesai!");
+
+  // Tambahkan kode untuk mencetak isi localStorage ke konsol
+  console.log(localStorage.getItem(STORAGE_KEY));
 }
 
 function findTodoIndex(todoId) {
@@ -164,7 +192,7 @@ return -1;
 }
 
 function saveData() {
-    if (isStorageExist()) {
+    if (isStorageExist())    {
     const parsed = JSON.stringify(todos);
     localStorage.setItem(STORAGE_KEY, parsed)
     document.dispatchEvent(new Event(RENDER_EVENT));
@@ -174,17 +202,13 @@ function saveData() {
 const SAVED_EVENT = 'saved-todo';
 const STORAGE_KEY = 'TODO_APPS';
 
-function ifStorageExist() /* boolean */ {
+function isStorageExist() /* boolean */ {
     if (typeof (Storage) === undefined) {
         alert("Browser kamu tidak mendukung local storage");
         return false;
     }
     return true;
 }
-
-document.addEventListener(SAVED_EVENT, function () {
-    console.log("Data berhasil disimpan");
-});
 
 function loadDataFromStorage() {
     const serializedData = localStorage.getItem(STORAGE_KEY);

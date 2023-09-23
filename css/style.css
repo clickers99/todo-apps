@@ -11,6 +11,13 @@ html, body {
     box-sizing: border-box;
 }
 
+h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+}
+
 header {
     background: #5F30E2;
     padding: 16px;
